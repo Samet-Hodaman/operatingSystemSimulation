@@ -2,20 +2,19 @@ import java.io.*;
 import java.time.LocalDateTime;
 
 public class FileIO {
-    public Task[] readTasksFromFile(String fileName) {
+    public static SortedList<Task> readTasksFromFile(String fileName) {
         try {
             File file = new File(fileName);
             BufferedReader bReader = new BufferedReader(new FileReader(file));
-            
+            SortedList<Task> sortedTaskList = new SortedList<>();
             while (true) {
                 String[] parts;
                 do {
                     String line;
                     if ((line = bReader.readLine()) == null) {
                         bReader.close();
-                        return null;
+                        return sortedTaskList;
                     }
-
                     parts = line.split(",");
                 } while (parts.length != 4);
 
@@ -26,39 +25,33 @@ public class FileIO {
                 String[] date = datePart.split("/");
                 String[] clock = clockPart.split(":");
 
-                int day = Integer.parseInt(date[0]);
+                int day = Integer.parseInt(date[0]);   //Parsing the arrival date time
                 int month = Integer.parseInt(date[1]);
                 int year = Integer.parseInt(date[2]);
                 int hour = Integer.parseInt(clock[0]);
                 int minute = Integer.parseInt(clock[1]);
-                int priority = getPriority(name);
+
+                int priority = 0;
+                switch (name) {
+                    case "security management" -> priority = 6;
+                    case "process management" -> priority = 5;
+                    case "memory management" -> priority = 4;
+                    case "user management" -> priority = 3;
+                    case "device management" -> priority = 2;
+                    case "file management" -> priority = 1;
+                    default -> { }
+                }
+
 
                 if (priority == 0)
                     System.out.println("HHEyeyeyeyeyeyeyeee there is an error occurred here (FileIO 36)");
 
-
                 LocalDateTime arrivalDateTime = LocalDateTime.of(year,month,day,hour,minute);
                 Task task = new Task(name,priority,burstTime,arrivalDateTime);
-
+                sortedTaskList.add(task);
             }
-
-
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-
-
-    }
-
-    private int getPriority(String name){
-        switch (name) {
-            case "Security Management" -> { return 6;}
-            case "Process Management" -> { return 5;}
-            case "Memory Management" -> { return 4;}
-            case "User Management" -> { return 3;}
-            case "Device Management" -> { return 2;}
-            case "File Management" -> { return 1;}
-            default -> { return 0;}
         }
     }
 }

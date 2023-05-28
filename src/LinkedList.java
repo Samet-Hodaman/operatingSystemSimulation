@@ -7,14 +7,6 @@ public class LinkedList<T> implements IList<T> {
         numberOfEntries = 0;
     }
 
-    public void showData() {
-        Node pointer = firstNode;
-        while (pointer != null) {
-            System.out.print(pointer.getData() + " ");
-            pointer = pointer.getNextNode();
-        }
-    }
-
     @Override
     public void add(T newEntry) {
         Node newNode = new Node(newEntry);
@@ -40,6 +32,7 @@ public class LinkedList<T> implements IList<T> {
                 newNode.setNextNode(nodeAfter);
                 nodeBefore.setNextNode(newNode);
             } // end if
+            numberOfEntries++;
         } else
             throw new IndexOutOfBoundsException(
                     "Illegal position given to add operation");
@@ -57,22 +50,56 @@ public class LinkedList<T> implements IList<T> {
 
     @Override
     public T remove(int givenPosition) {
-        return null;
+        T result;
+        if (givenPosition>0&&givenPosition<=numberOfEntries){
+            assert !isEmpty();
+            if (givenPosition==1){
+                result = firstNode.getData();
+                firstNode=firstNode.getNextNode();
+            }else {
+                Node nodeBefore = getNodeAt(givenPosition-1);
+                Node nodeToRemove = nodeBefore.getNextNode();
+                Node nodeAfter = nodeToRemove.getNextNode();
+                result = nodeToRemove.getData();
+                nodeBefore.setNextNode(nodeAfter);
+            }
+            numberOfEntries--;
+        }
+        else
+            throw new IndexOutOfBoundsException(
+                    "Illegal position given to remove operation.");
+        return result;
     }
 
     @Override
     public void clear() {
-
+        firstNode =null;
+        System.gc();
     }
 
     @Override
     public T replace(int givenPosition, T newEntry) {
-        return null;
+        if (givenPosition >0 && givenPosition <= numberOfEntries){
+            assert !isEmpty();
+            Node desiredNode = getNodeAt(givenPosition);
+            T originalEntry = desiredNode.getData();
+            desiredNode.setData(newEntry);
+            return originalEntry;
+        }
+        else
+            throw new IndexOutOfBoundsException(
+                    "Illegal position given to replace operation");
     }
 
     @Override
     public T getEntry(int givenPosition) {
-        return null;
+        if (givenPosition > 0 && givenPosition <= numberOfEntries){
+            assert !isEmpty();
+            return getNodeAt(givenPosition).getData();
+        }
+        else
+            throw new IndexOutOfBoundsException(
+                    "Illegal position given to getEntry operation.");
     }
 
     @Override
@@ -92,6 +119,12 @@ public class LinkedList<T> implements IList<T> {
 
     @Override
     public boolean contains(T anEntry) {
+        Node pointer = firstNode;
+        while (pointer.getData() == null){
+            if (pointer.getData() == anEntry)
+                return true;
+            pointer = pointer.getNextNode();
+        }
         return false;
     }
 

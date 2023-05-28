@@ -1,14 +1,9 @@
 import java.time.LocalDateTime;
-class Task {
-    private String name;
-    private int priority;
-    private int burstTime;
-    private LocalDateTime arrivalDateTime;
-    public Task(){
-        this(null,0,0,null);
-    }
-
-    LocalDateTime datee = LocalDateTime.of(2023,5,26,15,30);
+class Task implements Comparable<Task> {
+    private final String name;
+    private final int priority;
+    final int burstTime;
+    private final LocalDateTime arrivalDateTime;
 
     public Task(String name, int priority, int burstTime, LocalDateTime arrivalDateTime) {
         this.name = name;
@@ -35,7 +30,40 @@ class Task {
 
     @Override
     public String toString() {
-        return "Task [name=" + name + ", priority=" + priority + ", burstTime=" + burstTime + ", arrivalDateTime="
-                + arrivalDateTime + "]";
+        String space = "";
+        for (int i = name.length(); i < 23; i++)
+            space += " ";
+        return getName() + space + "priority= " + getPriority() + "\t burstTime= " + getBurstTime()
+                + "\t arrivalDateTime= " + arrivalDateTime.toString();
+    }
+
+    @Override
+    public int compareDateTo(Task other) {
+        if (arrivalDateTime.isAfter(other.arrivalDateTime))
+            return 1;
+        else if (arrivalDateTime.isEqual(other.arrivalDateTime))
+            return 0;
+        else
+            return -1;
+    }
+
+    @Override
+    public int comparePriorityTo(Task other) {
+        if (this.priority > other.priority)
+            return 1;
+        else if (this.priority == other.priority)
+            return 0;
+        else
+            return -1;
+    }
+
+    @Override
+    public int compareBurstTimeTo(Task other) {
+        if (this.burstTime > other.burstTime)
+            return 1;
+        else if (this.burstTime == other.burstTime)
+            return 0;
+        else
+            return -1;
     }
 }
