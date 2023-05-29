@@ -5,5 +5,4 @@ public interface StackInterface<T> {
     boolean isEmpty();
     void clear();
     int getLength();
-    void showData();
 }

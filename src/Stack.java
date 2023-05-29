@@ -7,13 +7,7 @@ public class Stack<T> implements StackInterface<T>{
         firstNode = null;
         numberOfEntries = 0;
     }
-    public void showData(){
-        Node pointer = firstNode;
-        while (pointer != null){
-            System.out.println(pointer.getData());
-            pointer = pointer.getNextNode();
-        }
-    }
+
     @Override
     public void push(T newEntry) {
         Node newNode = new Node(newEntry);

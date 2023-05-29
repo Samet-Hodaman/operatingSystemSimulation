@@ -26,6 +26,8 @@ public class SortedList<T extends Comparable<? super T>> implements SortedListIn
     @Override
     public boolean remove(T anEntry) {
 
+        T result = firstNode.getData();
+
         return false;
     }
 
@@ -111,10 +113,12 @@ public class SortedList<T extends Comparable<? super T>> implements SortedListIn
 
     @Override
     public T[] toArray() {
-        @SuppressWarnings("unchecked")
-        T[] result = (T[])new Object[numberOfEntries];
-        int index = 0;
+        if (isEmpty())
+            throw new EmptyStackException();
         Node pointer = firstNode;
+        @SuppressWarnings("unchecked")
+        T[] result = (T[])new Comparable[numberOfEntries];
+        int index = 0;
         while ((index < numberOfEntries) && (pointer != null)){
             result[index] = pointer.getData();
             pointer = pointer.getNextNode();
@@ -122,6 +126,7 @@ public class SortedList<T extends Comparable<? super T>> implements SortedListIn
         }
         return result;
     }
+
     private class Node {
         private T data;
         private Node next;

@@ -13,22 +13,12 @@ public class PriorityQueue<T extends Comparable<? super T>> implements PriorityQ
     @Override
     public void add(T newEntry) {
         Node newNode = new Node(newEntry);
-        if (isEmpty()) {
-            firstNode = newNode;
-            numberOfEntries++;
-        } else {
+        if (!isEmpty()) {
             firstNode.setBefore(newNode);
             newNode.setNextNode(firstNode);
-            firstNode = newNode;
-            numberOfEntries++;
         }
-    }
-    public void showData(){
-        Node pointer = firstNode;
-        while (pointer != null){
-            System.out.println(pointer.getData().toString());
-            pointer = pointer.getNextNode();
-        }
+        firstNode = newNode;
+        numberOfEntries++;
     }
 
     @Override
