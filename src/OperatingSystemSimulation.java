@@ -7,7 +7,7 @@ public class OperatingSystemSimulation {
         System.out.println("************************************");
 
         // Step 2: Print listed tasks
-        System.out.println("Sorted tasks list:");
+        System.out.println("\u001B[33mSorted tasks list \u001B[37m("+sortedTaskList.getLength()+")\u001B[0m");
         for (int i = 1; i <= sortedTaskList.getLength(); i++) {
             Task current = sortedTaskList.getEntry(i);
             System.out.println(current);
@@ -29,7 +29,7 @@ public class OperatingSystemSimulation {
 
         // Step 4.a: Print waiting priority line
         waitingPriorityLine.displayResults();
-        waitingPriorityLine.simulation(5,0.3);
+        waitingPriorityLine.simulation(5);
 
         System.out.println();
         System.out.println("************************************");
@@ -37,7 +37,7 @@ public class OperatingSystemSimulation {
 
         // Step 4.b: Print waiting burst time pile
         waitingBurstTime.displayResults();
-        waitingBurstTime.simulation(5,0.5);
+        waitingBurstTime.simulation(5);
 
 
         System.out.println("\n\u001B[32mAll tasks have been completed !\u001B[0m");

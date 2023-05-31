@@ -1,23 +1,26 @@
 import java.util.EmptyStackException;
+import java.util.NoSuchElementException;
 
-public class SortedList<T extends Comparable<? super T>> implements SortedListInterface<T>{
+public class SortedList<T extends Comparable<? super T>> implements SortedListInterface<T> {
     private Node firstNode;
     private int numberOfEntries;
-    public SortedList(){
+
+    public SortedList() {
         firstNode = null;
         numberOfEntries = 0;
     }
 
     @Override
     public void add(T newEntry) {
-        firstNode = add(newEntry,firstNode);
+        firstNode = add(newEntry, firstNode);
         numberOfEntries++;
     }
-    private Node add(T newEntry,Node currentNode){
-        if ((currentNode == null) || (newEntry.compareDateTo(currentNode.getData())<= 0)){
-            currentNode = new Node(newEntry,currentNode);
+
+    private Node add(T newEntry, Node currentNode) {
+        if ((currentNode == null) || (newEntry.compareDateTo(currentNode.getData()) <= 0)) {
+            currentNode = new Node(newEntry, currentNode);
         } else {
-            Node nodeAfter = add(newEntry,currentNode.getNextNode());
+            Node nodeAfter = add(newEntry, currentNode.getNextNode());
             currentNode.setNextNode(nodeAfter);
         }
         return currentNode;
@@ -25,17 +28,28 @@ public class SortedList<T extends Comparable<? super T>> implements SortedListIn
 
     @Override
     public boolean remove(T anEntry) {
+        if (contains(anEntry)) {
+            int position = getPosition(anEntry) -1;
+            System.out.println(position);
+            Node pointer = firstNode;
+            for (int i = 1; i < position;i++){
+                pointer = pointer.getNextNode();
+            }
 
-        T result = firstNode.getData();
-
-        return false;
+            Node removed = pointer.getNextNode();
+            Node nodeAfter = removed.getNextNode();
+            pointer.setNextNode(nodeAfter);
+            numberOfEntries--;
+            return true;
+        } else
+            throw new NoSuchElementException();
     }
 
     @Override
     public int getPosition(T anEntry) {
         Node current = firstNode;
         int position = 1;
-        while ((position <= numberOfEntries) && (anEntry.compareDateTo(current.getData())) > 0){
+        while ((position <= numberOfEntries) && (anEntry.compareDateTo(current.getData())) > 0) {
             current = current.getNextNode();
             position++;
         }
@@ -46,10 +60,10 @@ public class SortedList<T extends Comparable<? super T>> implements SortedListIn
 
     @Override
     public T getEntry(int givenPosition) {
-        if (givenPosition > 0 && givenPosition<=numberOfEntries){
+        if (givenPosition > 0 && givenPosition <= numberOfEntries) {
 
             Node current = firstNode;
-            for (int i = 1; i <givenPosition;i++)
+            for (int i = 1; i < givenPosition; i++)
                 current = current.getNextNode();
             return current.getData();
         } else
@@ -60,7 +74,7 @@ public class SortedList<T extends Comparable<? super T>> implements SortedListIn
     @Override
     public boolean contains(T anEntry) {
         Node current = firstNode;
-        while (current.getData() == null){
+        while (current.getData() != null) {
             if (current.getData() == anEntry)
                 return true;
             current = current.getNextNode();
@@ -73,15 +87,15 @@ public class SortedList<T extends Comparable<? super T>> implements SortedListIn
         Node nodeBefore = null;
         Node current = firstNode;
         T result;
-        if (givenPosition > 0 && givenPosition <= numberOfEntries){
+        if (givenPosition > 0 && givenPosition <= numberOfEntries) {
             if (isEmpty())
                 throw new EmptyStackException();
-            if (givenPosition == 1){
+            if (givenPosition == 1) {
                 result = firstNode.getData();
                 firstNode = null;
                 return result;
-            }else {
-                for (int i = 1; i < givenPosition;i++){
+            } else {
+                for (int i = 1; i < givenPosition; i++) {
                     nodeBefore = current;
                     current = current.getNextNode();
                 }
@@ -90,7 +104,7 @@ public class SortedList<T extends Comparable<? super T>> implements SortedListIn
                 result = current.getData();
                 return result;
             }
-        }else
+        } else
             throw new IndexOutOfBoundsException("" +
                     "Illegal position given to remove operation.");
     }
@@ -117,9 +131,9 @@ public class SortedList<T extends Comparable<? super T>> implements SortedListIn
             throw new EmptyStackException();
         Node pointer = firstNode;
         @SuppressWarnings("unchecked")
-        T[] result = (T[])new Comparable[numberOfEntries];
+        T[] result = (T[]) new Comparable[numberOfEntries];
         int index = 0;
-        while ((index < numberOfEntries) && (pointer != null)){
+        while ((index < numberOfEntries) && (pointer != null)) {
             result[index] = pointer.getData();
             pointer = pointer.getNextNode();
             index++;

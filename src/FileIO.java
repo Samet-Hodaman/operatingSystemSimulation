@@ -42,10 +42,6 @@ public class FileIO {
                     default -> { }
                 }
 
-
-                if (priority == 0)
-                    System.out.println("HHEyeyeyeyeyeyeyeee there is an error occurred here (FileIO 36)");
-
                 LocalDateTime arrivalDateTime = LocalDateTime.of(year,month,day,hour,minute);
                 Task task = new Task(name,priority,burstTime,arrivalDateTime);
                 sortedTaskList.add(task);

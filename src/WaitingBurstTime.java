@@ -11,12 +11,18 @@ public class WaitingBurstTime {
             for (int j = i; j <= taskList.getLength(); j++) { // Compare the burstest task to the others task
                 Task current = taskList.getEntry(j);
                 if (burstest.compareBurstTimeTo(current) == 0) { // If both burst time equal, compare their arrival date time.
-                    if (burstest.compareDateTo(current) < 0) {
+                    if (burstest.comparePriorityTo(current) > 0) {
                         burstest = taskList.replace(j, burstest);
                         taskList.replace(i, burstest);
                     }
+                    if (burstest.comparePriorityTo(current) == 0) {
+                        if (burstest.compareDateTo(current) < 0) {
+                            burstest = taskList.replace(j, burstest);
+                            taskList.replace(i, burstest);
+                        }
+                    }
                 } // Change the burstest task
-                if (burstest.compareBurstTimeTo(current) > 0) {
+                if (burstest.compareBurstTimeTo(current) < 0) {
                     burstest = taskList.replace(j, burstest);
                     taskList.replace(i, burstest);
                 }
@@ -25,19 +31,14 @@ public class WaitingBurstTime {
         }
     }
 
-    public void simulation(int numberOfExecution, double terminateProbability) {
+    public void simulation(int numberOfExecution) {
         if (numberOfExecution >= 0 && numberOfExecution <= pile.getLength()) {
             while (!pile.isEmpty()) {
                 if (numberOfExecution > pile.getLength())
                     numberOfExecution = pile.getLength();
 
                 for (int i = 1; i <= numberOfExecution; i++) {
-                    if (Math.random() < terminateProbability && !pile.isEmpty()) {
-                        Task terminated = pile.pop();
-                        System.out.println("\u001B[37m"+terminated+"\u001B[34m The task has been terminated! \u001B[0m");
-                        if (pile.isEmpty())
-                            break;
-                    }
+
                     if (!pile.isEmpty())
                         pile.pop();
                 }
@@ -50,6 +51,10 @@ public class WaitingBurstTime {
 
     public void displayResults() {
         System.out.println();
+        if (pile.isEmpty()) {
+            System.out.println("\u001B[33mPile of Waiting Burst Time is completed.\u001B[0m");
+            return;
+        }
         System.out.println("\u001B[33mPile of Waiting Burst Time \u001B[37m(" + pile.getLength() + ")\u001B[0m");
         StackInterface<Task> tempPile = new Stack<>();
         while (!pile.isEmpty()) { // pop, show and add the tasks.
@@ -60,5 +65,6 @@ public class WaitingBurstTime {
 
         while (!tempPile.isEmpty()) // Adding (collecting) back.
             pile.push(tempPile.pop());
+
     }
 }

@@ -12,7 +12,7 @@ public class Stack<T> implements StackInterface<T>{
     public void push(T newEntry) {
         Node newNode = new Node(newEntry);
         if (!isEmpty()) {
-            newNode.next = firstNode;
+            newNode.setNextNode(firstNode);
         }
         firstNode = newNode;
         numberOfEntries++;
@@ -23,8 +23,8 @@ public class Stack<T> implements StackInterface<T>{
         if (isEmpty())
             throw new EmptyStackException();
         else {
-            T result = firstNode.data;
-            firstNode = firstNode.next;
+            T result = firstNode.getData();
+            firstNode = firstNode.getNextNode();
             numberOfEntries--;
             return result;
         }
